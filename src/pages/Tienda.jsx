@@ -2,6 +2,7 @@ import PageHeader from "../components/PageHeader";
 import { useEffect, useState } from "react";
 import Productos from "../components/Productos";
 import "./Tienda.css";
+import { API_URL } from "../utils";
 
 function Tienda() {
   const [listaCategorias, setListCategorias] = useState([]);
@@ -12,12 +13,13 @@ function Tienda() {
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState([]);
 
   const leerServicio = () => {
-    const rutaServicio = "https://servicios.campus.pe/categorias.php";
+    const rutaServicio = API_URL + "categorias.php";
     fetch(rutaServicio)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
         setListCategorias(data); //se actualiza el estado de categorias
+        setCategoriaSeleccionada(data[0]); //selecciona la primera categoria
       });
   };
 

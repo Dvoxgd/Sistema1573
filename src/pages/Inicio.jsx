@@ -1,5 +1,5 @@
 import MainBanner from "../home/MainBanner"
-import Nosotros from "../home/Nosotros"
+import Nosotros from "../home/nosotros"
 import Noticias from "../home/Noticias"
 
 function Inicio() {

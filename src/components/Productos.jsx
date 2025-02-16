@@ -1,18 +1,20 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import "./Productos.css";
+import { agregarCarrito, API_URL } from "../utils/";
+import { Link } from "react-router-dom";
 
 function Productos(props) {
   console.log(props);
   const [listaProductos, setListaProductos] = useState([]);
+  const [productoSeleccionado, setProductoSeleccionado] = useState([]);
 
   useEffect(() => {
     leerServicio(props.codigoCategoria);
   }, [props.codigoCategoria]);
 
   const leerServicio = (idcategoria) => {
-    const rutaServicio =
-      "https://servicios.campus.pe/productos.php?idcategoria=" + idcategoria;
+    const rutaServicio = API_URL + "productos.php?idcategoria=" + idcategoria;
     fetch(rutaServicio)
       .then((response) => response.json())
       .then((data) => {
@@ -34,7 +36,7 @@ function Productos(props) {
           <div className="modal-content">
             <div className="modal-header">
               <h3 className="modal-title fs-5" id="exampleModalLabel">
-                Modal title
+                {productoSeleccionado.nombre}
               </h3>
               <button
                 type="button"
@@ -43,7 +45,56 @@ function Productos(props) {
                 aria-label="Close"
               />
             </div>
-            <div className="modal-body">...</div>
+            <div className="modal-body">
+              <div className="row">
+                <div className="col-md-6">
+                  <img
+                    src={
+                      productoSeleccionado.imagengrande === null
+                        ? API_URL + "imagenes/nofoto.jpg"
+                        : API_URL + productoSeleccionado.imagengrande
+                    }
+                    alt=""
+                    className="img-fluid"
+                  />
+                </div>
+                <div className="col-md-6">
+                  <table className="table">
+                    <tbody>
+                      <tr>
+                        <th>Stock</th>
+                        <td>{productoSeleccionado.unidadesenexistencia}</td>
+                      </tr>
+                      <tr>
+                        <th>Detalle</th>
+                        <td>{productoSeleccionado.detalle}</td>
+                      </tr>
+                      <tr>
+                        <th>Categoria</th>
+                        <td>{productoSeleccionado.categoria}</td>
+                      </tr>
+                      <tr>
+                        <th>Precio</th>
+                        <td>
+                          S/.{" "}
+                          {productoSeleccionado.preciorebajado == "0"
+                            ? Number(productoSeleccionado.precio).toFixed(2)
+                            : Number(
+                                productoSeleccionado.preciorebajado
+                              ).toFixed(2)}
+                          <span className="precio-anterior">
+                            {productoSeleccionado.preciorebajado == "0"
+                              ? ""
+                              : "S/. " +
+                                Number(productoSeleccionado.precio).toFixed(2)}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
             <div className="modal-footer">
               <button
                 type="button"
@@ -68,24 +119,33 @@ function Productos(props) {
         {listaProductos.map((item) => (
           <div className="col" key={item.idproducto}>
             <div className="card h-100">
-              <img
-                src={"https://servicios.campus.pe/" + item.imagenchica}
-                className="card-img-top"
-                alt="..."
-              />
-              {
-                item.preciorebajado === "0"
-                ? ""
-                : <span className="porcentaje-descuento">-{((1 - item.preciorebajado/item.precio)*100).toFixed(0)}%</span>
-              }
+              <Link to={"/productodetalle/"+item.idproducto}>
+                <img
+                  src={
+                    item.imagenchica === null
+                      ? API_URL + "imagenes/nofoto.jpg"
+                      : API_URL + item.imagenchica
+                  }
+                  className="card-img-top"
+                  alt="..."
+                />
+              </Link>
+              {item.preciorebajado === "0" ? (
+                ""
+              ) : (
+                <span className="porcentaje-descuento">
+                  -{((1 - item.preciorebajado / item.precio) * 100).toFixed(0)}%
+                </span>
+              )}
               <i
                 className="bi bi-eye icono-vista-rapida"
+                title="vista rapida"
                 data-bs-toggle="modal"
                 data-bs-target="#vistaRapidaModal"
-                onClick={()=>leerProductoVistaRapida(item.idproducto)}
+                onClick={() => leerProductoVistaRapida(item.idproducto)}
               ></i>
               <div className="card-body">
-                <h5 className="card-title">{item.nombre}</h5>
+                <h6 className="card-title">{item.nombre}</h6>
                 <p className="card-text">
                   S/.{" "}
                   {item.preciorebajado == "0"
@@ -96,6 +156,11 @@ function Productos(props) {
                       ? ""
                       : "S/. " + Number(item.precio).toFixed(2)}
                   </span>
+                  <i
+                    className="bi bi-basket icono-carrito"
+                    title="añadir al carrito"
+                    onClick={() => agregarCarrito(item, 1)}
+                  />
                 </p>
               </div>
             </div>
@@ -107,14 +172,14 @@ function Productos(props) {
 
   const leerProductoVistaRapida = (idproducto) => {
     console.log(idproducto);
-    const rutaServicio ="https://servicios.campus.pe/productos.php?idproducto=" + idproducto;
+    const rutaServicio = API_URL + "productos.php?idproducto=" + idproducto;
     fetch(rutaServicio)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        
+        setProductoSeleccionado(data[0]);
       });
-  }
+  };
 
   return (
     <>

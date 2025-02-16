@@ -1,16 +1,18 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import PageHeader from "../components/PageHeader";
+import { agregarProveedor, API_URL } from "../utils";
+import "./Proveedores.css";
 
 function Proveedores() {
   //Hooks: useState, useEffect
-  const [listaProveedores, setListaProveedores] = useState([]); 
+  const [listaProveedores, setListaProveedores] = useState([]);
 
   useEffect(() => {
     leerServicio();
   }, []);
   const leerServicio = () => {
-    const rutaServicio = "https://servicios.campus.pe/proveedores.php";
+    const rutaServicio = API_URL + "proveedores.php";
     fetch(rutaServicio)
       .then((response) => response.json())
       .then((data) => {
@@ -34,7 +36,7 @@ function Proveedores() {
         </thead>
         <tbody>
           {listaProveedores.map((item) => (
-            <tr key={item.idproveedor}>
+            <tr key={item.idproveedor} onClick={() => agregarProveedor(item)} id="proveedor-row" title="Agregar a seleccionados">
               <td>{item.idproveedor}</td>
               <td>{item.nombreempresa}</td>
               <td>{item.nombrecontacto}</td>
@@ -50,11 +52,9 @@ function Proveedores() {
 
   return (
     <>
-      <PageHeader titulo="Proveedores"/>
+      <PageHeader titulo="Proveedores" />
       <section className="padded">
-        <div className="container">
-          {drawTable()}
-        </div>
+        <div className="container">{drawTable()}</div>
       </section>
     </>
   );

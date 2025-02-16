@@ -12,6 +12,12 @@ import Proveedores from './pages/Proveedores'
 import Empleados from './pages/Empleados'
 import Tienda from './pages/Tienda'
 import Clientes from './pages/Clientes'
+import Carrito from './pages/Carrito'
+import ProductoDetalle from './pages/ProductoDetalle'
+import Login from './pages/Login'
+import Directores from './pages/Directores'
+import Pagina404 from './pages/Pagina404'
+import Seleccionados from './pages/Seleccionados'
 
 const router = createHashRouter([
   {
@@ -40,7 +46,31 @@ const router = createHashRouter([
       {
         path: '/clientes',
         element: <Clientes />
-      }
+      },
+      {
+        path: '/carrito',
+        element: <Carrito />
+      },
+      {
+        path: '/productodetalle/:idproducto',
+        element: <ProductoDetalle />
+      },
+      {
+        path: '/seleccionados',
+        element: <Seleccionados />
+      },
+      {
+        path: '/login',
+        element: <Login />
+      },
+      {
+        path: '/directores',
+        element: <Directores />
+      },
+      {
+        path: '*',
+        element: <Pagina404 />
+      },
     ]
   }
 ])

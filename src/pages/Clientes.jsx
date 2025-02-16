@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
+import { API_URL } from "../utils";
 
 function Clientes() {
   const [listaClientes, setListaClientes] = useState([]);
@@ -8,7 +9,7 @@ function Clientes() {
     leerServicio();
   }, []);
   const leerServicio = () => {
-    const rutaServicio = "https://servicios.campus.pe/servicioclientes.php";
+    const rutaServicio = API_URL + "servicioclientes.php";
     fetch(rutaServicio)
       .then((response) => response.json())
       .then((data) => {

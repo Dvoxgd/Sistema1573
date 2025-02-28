@@ -54,7 +54,9 @@ function Clientes() {
     <>
       <PageHeader titulo="Clientes" />
       <section className="padded">
-        <div className="container">{drawTable()}</div>
+        <div className="container">
+          {drawTable()}
+        </div>
       </section>
     </>
   );

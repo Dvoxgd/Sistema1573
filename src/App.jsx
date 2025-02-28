@@ -16,6 +16,8 @@ import Login from './pages/Login'
 import Directores from './pages/Directores'
 import Seleccionados from './pages/Seleccionados'
 
+//Ya no es necesario App.jsx
+
 function App() {
 
   return (
